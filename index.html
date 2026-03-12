@@ -3,26 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <script>
-var maintenance = true;
-
-if (maintenance) {
-    window.location.href = "maintenance.html";
-}
-</script>
+    <meta http-equiv="refresh" content="0; URL=maintenance.html">
     <title>Document</title>
 </head>
 <body>
     <p>test</p>
 </body>
-    <script>
-var maintenance = true;
-
-var urlParams = new URLSearchParams(window.location.search);
-var admin = urlParams.get("admin");
-
-if (maintenance && admin !== "true") {
-    window.location.href = "maintenance.html";
-}
-    </script>
 </html>
