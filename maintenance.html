@@ -38,6 +38,24 @@
     <div class="container">
         <div class="title">MAINTENANCE</div>
         <div class="message">We are working on the issues and improving the website.</div>
+    <div class="container">
+        <input type="password" placeholder="Enter the password..." style="padding: 10px; width: 80%; border: none; border-radius: 5px; margin-top: 20px;">
     </div>
+    </div>
+     <script>
+        const input = document.querySelector('input');
+        input.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const password = input.value;
+                if (password === 'supergamer_131013') {
+                    alert('Access granted!');
+                    window.location.href = "https://supergamer.pages.dev/index.html?283583483853548%"; // Redirect to the main page
+                } else {
+                    alert('Incorrect password. Please try again.');
+                }
+                input.value = ''; // Clear the input field
+            }
+        });
+     </script>
 </body>
 </html>
