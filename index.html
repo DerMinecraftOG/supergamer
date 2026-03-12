@@ -10,8 +10,13 @@
     <p>test</p>
 </body>
     <script>
-    if (typeof maintenance !== "undefined" && maintenance === true) {
-      window.location.href = "/maintenance.html";
-    }
+var maintenance = true;
+
+var urlParams = new URLSearchParams(window.location.search);
+var admin = urlParams.get("admin");
+
+if (maintenance && admin !== "true") {
+    window.location.href = "maintenance.html";
+}
     </script>
 </html>
