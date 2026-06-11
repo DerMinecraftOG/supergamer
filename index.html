@@ -10,6 +10,7 @@
             font-family: Arial, sans-serif;
             background-color: skyblue;
             font-size: 30px;
+            caret-color: transparent;
             
         }
         .start {
@@ -19,12 +20,34 @@
             color : black;
               text-decoration: underline;
         }
+
+        .yt {
+            font-size: 25px;
+            caret-color: transparent;
+            background-color: red;
+            border-radius: 10px;
+            border: none;
+            color: white;
+        }
+
+        .yt:hover {
+            background-color: red;
+            cursor: pointer;
+            font-size: 30px;
+            box-shadow: 12px;
+            
+        }
     </style>
 </head>
 <body>
     <h1 class="start">Supergamer</h1>
     <h4>Das ist die öffentliche Seite von Supergamer.
     </h4>
-    <p></p>
+    <button class="yt" onclick="openYT()">Mein YT Kanal</button>
+    <script>
+        function openYT() {
+            window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0", "_blank");
+        }
+    </script>
 </body>
 </html>
