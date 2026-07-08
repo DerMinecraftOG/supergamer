@@ -1,52 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <meta http-equiv="refresh" content="0; URL=maintenance.html"> <!-->
+    <!-- <meta http-equiv="refresh" content="0; URL=maintenance.html"> -->
     <title>Startseite</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: skyblue;
             font-size: 30px;
             caret-color: transparent;
-            
-        }
-        .start {
             text-align: center;
+        }
+
+        .start {
             font-size: 50px;
             font-weight: bold;
-            color : black;
-              text-decoration: underline;
+            color: black;
+            text-decoration: underline;
         }
 
         .yt {
             font-size: 25px;
-            caret-color: transparent;
             background-color: red;
             border-radius: 10px;
             border: none;
             color: white;
+            padding: 10px 20px;
+            margin: 10px;
         }
 
         .yt:hover {
-            background-color: red;
             cursor: pointer;
             font-size: 30px;
-            box-shadow: 12px;
-            
+        }
+
+        .download {
+            font-size: 25px;
+            background-color: green;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+        }
+
+        .download:hover {
+            cursor: pointer;
+            font-size: 30px;
         }
     </style>
 </head>
+
 <body>
     <h1 class="start">Supergamer</h1>
-    <h4>Das ist die öffentliche Seite von Supergamer.
-    </h4>
+
+    <h4>Das ist die öffentliche Seite von Supergamer.</h4>
+
     <button class="yt" onclick="openYT()">Mein YT Kanal</button>
+
+    <button class="download" onclick="downloadEXE()">
+        Programm herunterladen
+    </button>
+
     <script>
         function openYT() {
             window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0", "_blank");
+        }
+
+        function downloadEXE() {
+            const link = document.createElement("a");
+            link.href = "programm.exe"; // Name oder Pfad der EXE-Datei
+            link.download = "programm.exe";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
