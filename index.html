@@ -51,6 +51,24 @@
             cursor: pointer;
             font-size: 30px;
         }
+
+
+
+        .skins {
+            font-size: 25px;
+            background-color: blue;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+        }
+
+        .skins:hover {
+            cursor: pointer;
+            font-size: 30px;
+        }
+        
     </style>
 </head>
 
@@ -61,6 +79,8 @@
 
     <button class="yt" onclick="openYT()">Mein YT Kanal</button>
 
+    <button class="skins" onclick="openSkins()">Minecraft Skins</button>
+
     <button class="download" onclick="downloadEXE()">
         Programm herunterladen
     </button>
@@ -68,6 +88,10 @@
     <script>
         function openYT() {
             window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0", "_blank");
+        }
+
+        function openSkins(){
+            window.open("https://supergamer.pages.dev/skins/skins", "_blank")
         }
 
         function downloadEXE() {
