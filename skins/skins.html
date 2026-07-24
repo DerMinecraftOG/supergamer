@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skins</title>
+    <title>Trending Skins</title>
     <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     <style>
         @import url('https://fonts.cdnfonts.com/css/minecraft-4');
-        
 
-
-
-        body {
-            background-color: white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Minecraft', sans-serif;
+        }
 
         .mc {
             font-family: 'Minecraft', sans-serif;
@@ -47,14 +50,136 @@
         .header.right {
             right: 30px;
         }
-</style>
-                     
+
+        .skins-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skin-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .skin-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #ddd;
+        }
+
+        .skin-card-content {
+            padding: 20px;
+        }
+
+        .skin-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .skin-card p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .rank {
+            display: inline-block;
+            background-color: #ffd700;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-family: 'Minecraft', sans-serif;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <div class="header-container">
         <h1 class="mc">Minecraft Skins</h1>
-        <a class="header left" href="/index.html">🏠 Home</a>
-        <a class="header right" href="skins/trendingskins.html">🔥 Trending</a>
+        <a class="header left" href="../index.html">🏠 Home</a>
+    </div>
+
+    <div class="skins-container">
+        <div class="skin-card">
+            <img src="skin1.png" alt="Diamond Pro" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#1</h3>
+                <div class="rank">🥇 #1</div>
+                <a href="skin1.png" download="skin1.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="skin2.png" alt="Nether Lord" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#2</h3>
+                <div class="rank">🥈 #2</div>
+                <a href="skin2.png" download="skin2.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="skin3.png" alt="Dragon Slayer" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#3</h3>
+                <div class="rank">🥉 #3</div>
+                <a href="skin3.png" download="skin3.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="skin4.png" alt="Jungle Explorer" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#4</h3>
+                <div class="rank">⭐ #4</div>
+                <a href="skin4.png" download="skin4.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="skin5.png" alt="Ice Wizard" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#5</h3>
+                <div class="rank">⭐ #5</div>
+                <a href="skin5.png" download="skin5.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="skin6.png" alt="Shadow Ninja" class="skin-image">
+            <div class="skin-card-content">
+                <h3>#6</h3>
+                <div class="rank">⭐ #6</div>
+                <a href="skin6.png" download="skin6.png" class="download-btn">⬇️ Download</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>
