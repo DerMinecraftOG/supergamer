@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Passwortschutz</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background: white;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            text-align: center;
+        }
+
+        .login-box h1 {
+            margin-bottom: 20px;
+        }
+
+        #password {
+            width: 250px;
+            padding: 12px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            width: 250px;
+            margin: 10px auto 0;
+            padding: 12px;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #error {
+            color: red;
+            min-height: 20px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <h1>Passwort</h1>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Passwort eingeben"
+            autocomplete="off"
+        >
+
+        <button onclick="checkPassword()">
+            Weiter
+        </button>
+
+        <p id="error"></p>
+
+    </div>
+
+
+    <script>
+
+        /*
+         * SHA-256 Hash des Passworts "test"
+         *
+         * Das Passwort steht dadurch nicht direkt
+         * als Klartext im Code.
+         */
+        const correctPasswordHash =
+            "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+
+
+        async function sha256(text) {
+
+            const encoder = new TextEncoder();
+
+            const data = encoder.encode(text);
+
+            const hashBuffer =
+                await crypto.subtle.digest("SHA-256", data);
+
+            const hashArray =
+                Array.from(new Uint8Array(hashBuffer));
+
+            const hashHex =
+                hashArray
+                    .map(byte =>
+                        byte.toString(16).padStart(2, "0")
+                    )
+                    .join("");
+
+            return hashHex;
+        }
+
+
+        /*
+         * Passwort überprüfen
+         */
+        async function checkPassword() {
+
+            const passwordInput =
+                document.getElementById("password");
+
+            const error =
+                document.getElementById("error");
+
+            const password =
+                passwordInput.value;
+
+
+            // Nichts eingegeben
+            if (password === "") {
+
+                error.textContent =
+                    "Bitte Passwort eingeben.";
+
+                return;
+            }
+
+
+            // Passwort hashen
+            const passwordHash =
+                await sha256(password);
+
+
+            // Passwort richtig
+            if (passwordHash === correctPasswordHash) {
+
+                /*
+                 * Login merken.
+                 * Dadurch können die anderen Seiten
+                 * überprüfen, ob man eingeloggt ist.
+                 */
+                sessionStorage.setItem(
+                    "eingeloggt",
+                    "true"
+                );
+
+
+                /*
+                 * Zur index.html weiterleiten
+                 */
+                window.location.href = "index.html";
+
+            }
+
+            // Passwort falsch
+            else {
+
+                error.textContent =
+                    "Falsches Passwort!";
+
+                passwordInput.value = "";
+
+                passwordInput.focus();
+            }
+        }
+
+
+        /*
+         * Enter-Taste
+         */
+        document
+            .getElementById("password")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        checkPassword();
+
+                    }
+
+                }
+            );
+
+    </script>
+
+</body>
+</html>
