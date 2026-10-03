@@ -3,105 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="0; URL=maintenance.html"> -->
-    <title>Startseite</title>
+
+    <title>Bewerbung</title>
 
     <style>
         body {
+            margin: 0;
+            padding: 30px;
+            background: skyblue;
             font-family: Arial, sans-serif;
-            background-color: skyblue;
-            font-size: 30px;
-            caret-color: transparent;
-            text-align: center;
         }
 
-        .start {
-            font-size: 50px;
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #000;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: white;
+            border: 1px solid black;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #ddd;
+        }
+
+        #status {
+            margin-top: 15px;
             font-weight: bold;
-            color: black;
-            text-decoration: underline;
         }
-
-        .yt {
-            font-size: 25px;
-            background-color: red;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .yt:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-
-        .download {
-            font-size: 25px;
-            background-color: green;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .download:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-
-
-
-        .skins {
-            font-size: 25px;
-            background-color: blue;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .skins:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-        
     </style>
 </head>
 
 <body>
-    <h1 class="start">Supergamer</h1>
 
-    <h4>Das ist die öffentliche Seite von Supergamer.</h4>
+<div class="container">
 
-     <button class="yt" onclick="openYT()">Mein YT Kanal</button>
+    <h1>Bewerbung</h1>
 
-    <button class="skins" onclick="openSkins()">Minecraft Skins</button>
+    <p>
+        Bewirb dich hier als Developer oder Designer.
+    </p>
 
-   <!-- <button class="download" onclick="downloadEXE()">
-        Programm herunterladen
-    </button> -->
+    <form id="applicationForm">
 
-    <script>
-        function openYT() {
-            window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0", "_blank");
-        }
+        <label>Name *</label>
+        <input
+            type="text"
+            name="name"
+            placeholder="Dein Name"
+            required
+        >
 
-        function openSkins(){
-            window.open("https://supergamer.pages.dev/skins/skins", "_blank")
-        }
+        <label>Discord Tag *</label>
+        <input
+            type="text"
+            name="discord"
+            placeholder="z.B. username"
+            required
+        >
 
-        function downloadEXE() {
-            const link = document.createElement("a");
-            link.href = "GrafikKartenReload.exe";
-            link.download = "GrafikKartenReload.exe";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+        <label>E-Mail *</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="deine@email.de"
+            required
+        >
+
+        <label>Alter *</label>
+        <input
+            type="number"
+            name="age"
+            min="13"
+            max="100"
+            required
+        >
+
+        <label>Position *</label>
+        <select name="position" required>
+            <option value="">Bitte auswählen</option>
+            <option value="Developer">Developer</option>
+            <option value="Designer">Designer</option>
+            <option value="Developer & Designer">
+                Developer & Designer
+            </option>
+        </select>
+
+        <label>Erfahrung *</label>
+        <textarea
+            name="experience"
+            placeholder="Welche Erfahrungen hast du?"
+            required
+        ></textarea>
+
+        <label>Portfolio / GitHub</label>
+        <input
+            type="url"
+            name="portfolio"
+            placeholder="https://..."
+        >
+
+        <label>Warum möchtest du dich bewerben? *</label>
+        <textarea
+            name="reason"
+            placeholder="Erzähle uns etwas über dich..."
+            required
+        ></textarea>
+
+        <button type="submit">
+            Bewerbung absenden
+        </button>
+
+    </form>
+
+    <div id="status"></div>
+
+</div>
+
+
+<script>
+
+    // =====================================================
+    // DEIN DISCORD WEBHOOK
+    // =====================================================
+
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1556010416407318569/OpR9YKTtjWktPi3UhTcAUfE_Qhx8QEKDv1RJduorGyqK897q2o94IMkztm_LJ5tubBz-";
+
+
+    // =====================================================
+    // FORMULAR
+    // =====================================================
+
+    document
+        .getElementById("applicationForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const form = event.target;
+            const status = document.getElementById("status");
+
+            status.textContent = "Bewerbung wird gesendet...";
+
+            const name = form.name.value;
+            const discord = form.discord.value;
+            const email = form.email.value;
+            const age = form.age.value;
+            const position = form.position.value;
+            const experience = form.experience.value;
+            const portfolio = form.portfolio.value;
+            const reason = form.reason.value;
+
+
+            // =================================================
+            // DISCORD EMBED
+            // =================================================
+
+            const payload = {
+
+                username: "Bewerbungs-System",
+
+                embeds: [
+
+                    {
+                        title: "📩 Neue Bewerbung",
+
+                        color: 5814783,
+
+                        fields: [
+
+                            {
+                                name: "👤 Name",
+                                value: name,
+                                inline: true
+                            },
+
+                            {
+                                name: "💬 Discord",
+                                value: discord,
+                                inline: true
+                            },
+
+                            {
+                                name: "📧 E-Mail",
+                                value: email,
+                                inline: true
+                            },
+
+                            {
+                                name: "🎂 Alter",
+                                value: age,
+                                inline: true
+                            },
+
+                            {
+                                name: "💼 Bewerbung als",
+                                value: position,
+                                inline: true
+                            },
+
+                            {
+                                name: "🔗 Portfolio",
+                                value: portfolio || "Nicht angegeben"
+                            },
+
+                            {
+                                name: "💻 Erfahrung",
+                                value: experience
+                            },
+
+                            {
+                                name: "📝 Motivation",
+                                value: reason
+                            }
+
+                        ],
+
+                        footer: {
+                            text: "Bewerbungs-System"
+                        },
+
+                        timestamp: new Date().toISOString()
+                    }
+
+                ]
+
+            };
+
+
+            // =================================================
+            // AN DISCORD SENDEN
+            // =================================================
+
+            try {
+
+                const response = await fetch(WEBHOOK_URL, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(payload)
+
+                });
+
+
+                if (!response.ok) {
+                    throw new Error("Discord Fehler");
+                }
+
+
+                status.textContent =
+                    "✅ Bewerbung erfolgreich abgeschickt!";
+
+                form.reset();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "❌ Fehler beim Senden der Bewerbung.";
+
+            }
+
+        });
+
+</script>
+
 </body>
 </html>
