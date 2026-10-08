@@ -1,113 +1,118 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="0; URL=maintenance.html"> -->
-    <title>Startseite</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: skyblue;
-            font-size: 30px;
-            caret-color: transparent;
-            text-align: center;
-        }
-
-        .start {
-            font-size: 50px;
-            font-weight: bold;
-            color: black;
-            text-decoration: underline;
-        }
-
-        .yt {
-            font-size: 25px;
-            background-color: red;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .yt:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-
-        .download {
-            font-size: 25px;
-            background-color: green;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .download:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-
-
-
-        .skins {
-            font-size: 25px;
-            background-color: blue;
-            border-radius: 10px;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-        }
-
-        .skins:hover {
-            cursor: pointer;
-            font-size: 30px;
-        }
-        
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startseite</title>
+  <style>
+    /* Hier dein CSS einfügen */
+    [hidden] { display: none !important; }
+    body { font-family: sans-serif; text-align: center; margin-top: 10vh; }
+    input, button { padding: 8px 12px; font-size: 1rem; }
+    #message { color: red; min-height: 1.5em; }
+  </style>
 </head>
-
 <body>
-    <h1 class="start">Supergamer</h1>
 
+  <!-- LOGIN-ANSICHT -->
+  <div id="login" hidden>
+    <h1>Supergamer</h1>
+    <h4>Bitte Passwort eingeben</h4>
+    <form id="loginForm">
+      <input type="password" id="password" placeholder="Passwort" required autofocus>
+      <button type="submit" id="loginBtn">Einloggen</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <!-- GESCHÜTZTE STARTSEITE -->
+  <div id="app" hidden>
+    <h1>Supergamer</h1>
     <h4>Das ist die öffentliche Seite von Supergamer.</h4>
+    <p><a href="#">Mein YT Kanal</a></p>
+    <p><a href="#">Minecraft Skins</a></p>
+    <p><a href="#">Bewerbungsformular</a></p>
+    <p><button id="logoutBtn">Ausloggen</button></p>
+  </div>
 
-     <button class="yt" onclick="openYT()">Mein YT Kanal</button>
+  <script>
+    // SHA-256-Hash des Passworts (Standard: "geheim123")
+    const PASSWORD_HASH = "3334ba9c681ba988d94394d227db0bac1f69e1daabe6033ca9ecc4858df07d9b";
+    const MAX_ATTEMPTS = 5;
+    const LOCK_MS = 20 * 60 * 1000;        // 20 Minuten Sperre
+    const SESSION_MS = 8 * 60 * 60 * 1000; // Login 8 Stunden gültig
 
-    <button class="skins" onclick="openSkins()">Minecraft Skins</button>
+    const $ = (id) => document.getElementById(id);
+    const loginView = $("login"), appView = $("app");
+    const input = $("password"), button = $("loginBtn"), msg = $("message");
+    let timer;
 
-    <button class="download" onclick="applyForm()">Bewerbungsformular</button>
+    function getState() {
+      try { return JSON.parse(localStorage.getItem("sg_attempts")) || { count: 0, lockUntil: 0 }; }
+      catch { return { count: 0, lockUntil: 0 }; }
+    }
+    function setState(s) { localStorage.setItem("sg_attempts", JSON.stringify(s)); }
+    function isLoggedIn() { return Number(localStorage.getItem("sg_session") || 0) > Date.now(); }
 
-   <!-- <button class="download" onclick="downloadEXE()">
-        Programm herunterladen
-    </button> -->
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
 
-    <script>
-        function openYT() {
-            window.open("https://www.youtube.com/watch?v=xvFZjo5PgG0", "_blank");
-        }
+    function show() {
+      const loggedIn = isLoggedIn();
+      appView.hidden = !loggedIn;
+      loginView.hidden = loggedIn;
+      if (!loggedIn) updateLock();
+    }
 
-function openSkins(){
-    window.location.href = "https://supergamer.pages.dev/skins/skins";
-}
+    function updateLock() {
+      const s = getState();
+      const left = s.lockUntil - Date.now();
+      if (left > 0) {
+        input.disabled = button.disabled = true;
+        const m = Math.floor(left / 60000), sec = Math.floor((left % 60000) / 1000);
+        msg.textContent = `Zu viele Versuche. Bitte warte noch ${m}:${String(sec).padStart(2, "0")} Minuten.`;
+        clearTimeout(timer);
+        timer = setTimeout(updateLock, 1000);
+      } else {
+        if (s.lockUntil) { setState({ count: 0, lockUntil: 0 }); msg.textContent = ""; }
+        input.disabled = button.disabled = false;
+      }
+    }
 
-function applyForm(){
-    window.location.href = "https://apply.supergamer.pages.dev";
-}
+    $("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const s = getState();
+      if (s.lockUntil > Date.now()) return updateLock();
 
-        function downloadEXE() {
-            const link = document.createElement("a");
-            link.href = "GrafikKartenReload.exe";
-            link.download = "GrafikKartenReload.exe";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+      if ((await sha256(input.value)) === PASSWORD_HASH) {
+        localStorage.removeItem("sg_attempts");
+        localStorage.setItem("sg_session", String(Date.now() + SESSION_MS));
+        input.value = "";
+        msg.textContent = "";
+        show();
+        return;
+      }
+
+      s.count += 1;
+      input.value = "";
+      if (s.count >= MAX_ATTEMPTS) {
+        s.lockUntil = Date.now() + LOCK_MS;
+        setState(s);
+        updateLock();
+      } else {
+        setState(s);
+        msg.textContent = `Falsches Passwort. Noch ${MAX_ATTEMPTS - s.count} Versuch(e).`;
+      }
+    });
+
+    $("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("sg_session");
+      show();
+    });
+
+    show();
+  </script>
 </body>
 </html>
